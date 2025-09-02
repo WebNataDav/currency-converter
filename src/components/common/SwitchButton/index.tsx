@@ -1,4 +1,3 @@
-//import React from 'react';
 import { IoSwapHorizontal } from 'react-icons/io5';
 import styles from './styles.module.scss';
 
@@ -15,6 +14,7 @@ export const SwitchButton: React.FC<SwitchButtonProps> = ({
 }) => {
   return (
     <button
+      type="button"
       className={`${styles.switchButton} ${className}`}
       onClick={onClick}
       aria-label={ariaLabel}

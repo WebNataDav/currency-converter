@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Currency } from '@/types';
+import SelectModal from '../SelectModal/index';
+import { SelectedValue } from './SelectedValue';
 
 import styles from './styles.module.scss';
-import SelectModal from '../SelectModal/index';
-
 
 interface SelectProps {
   label: string;
@@ -34,8 +34,6 @@ const Select: React.FC<SelectProps> = ({
     setSearchTerm('');
   };
 
-  console.log('val', value)
-
   return (
     <div className={`${styles.selectContainer} ${className}`}>
       <label className={styles.label}>{label}</label>
@@ -44,13 +42,7 @@ const Select: React.FC<SelectProps> = ({
         className={styles.selectTrigger}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className={styles.selectedValue}>
-          <span className={styles.currencySymbol}>{value.symbol}</span>
-          <div className={styles.currencyValues}>
-            <span className={styles.currencyCode}>{value.code}</span>
-            <span className={styles.currencyName}>{value.name}</span>
-          </div>
-        </div>
+        <SelectedValue value={value} />
       </div>
 
       {isOpen && (

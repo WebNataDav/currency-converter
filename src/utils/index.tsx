@@ -37,7 +37,6 @@ export const getCurrencyName = (code: string): string => {
   return currencyNames[code] || code;
 };
 
-// Helper function to get currency symbols
 export const getCurrencySymbol = (code: string): string => {
   const currencySymbols: Record<string, string> = {
     USD: '$',
@@ -53,4 +52,17 @@ export const getCurrencySymbol = (code: string): string => {
   };
 
   return currencySymbols[code] || code;
+};
+
+export const formatCurrency = (value: number, currencyCode: string): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currencyCode,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 6
+  }).format(value);
+};
+
+export const formatRate = (rate: number): string => {
+  return rate.toFixed(6);
 };

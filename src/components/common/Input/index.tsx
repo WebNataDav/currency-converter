@@ -24,17 +24,14 @@ const Input: React.FC<InputProps> = ({
 }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // For currency input, allow only numbers, decimal points, and commas
     const inputValue = e.target.value;
 
-    // Allow numbers, commas, and decimal points
     if (/^[0-9,.]*$/.test(inputValue) || inputValue === '') {
       onChange(inputValue);
     }
   };
 
   const handleBlur = () => {
-    // You could convert commas to periods or format as currency
     if (value) {
       const formattedValue = value.replace(',', '.');
       onChange(formattedValue);
