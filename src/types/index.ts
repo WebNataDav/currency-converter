@@ -10,20 +10,6 @@ export interface ExchangeRates {
   date: string;
 }
 
-// export interface ApiResponse {
-//   success: boolean;
-//   timestamp?: number;
-//   base?: string;
-//   date?: string;
-//   rates?: Record<string, number>;
-//   error?: ApiError;
-// }
-
-// export interface ApiError {
-//   code: number;
-//   message: string;
-// }
-
 export interface ConversionResult {
   amount: number;
   fromCurrency: string;
