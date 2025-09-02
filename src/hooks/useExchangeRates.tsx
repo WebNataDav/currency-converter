@@ -49,6 +49,7 @@ export const useExchangeRates = () => {
     currencies,
     loading,
     error,
-    refreshRates
+    refreshRates,
+    lastUpdated: rates?.date
   };
 };

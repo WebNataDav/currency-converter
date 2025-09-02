@@ -5,9 +5,10 @@ import { Currency } from '@/types';
 import { useExchangeRates } from '@/hooks/useExchangeRates';
 import { convertCurrency } from '@/services/currencyConverter';
 import { SwitchButton } from '../common/SwitchButton/index';
+import Result from '../Result/index';
+import { getStoredPreferences, setStoredPreferences, StoredPreferences } from '@/utils/localStorage';
 
 import styles from './styles.module.scss';
-import Result from '../Result/index';
 
 const Form: React.FC = () => {
   const [amount, setAmount] = useState('1');
@@ -15,18 +16,48 @@ const Form: React.FC = () => {
   const [toCurrency, setToCurrency] = useState<Currency | null>(null);
   const [convertedAmount, setConvertedAmount] = useState<number | null>(null);
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+  const [hasLoadedFromStorage, setHasLoadedFromStorage] = useState(false);
 
   const { rates, currencies, loading, error } = useExchangeRates();
 
   useEffect(() => {
-    if (currencies.length > 0 && !fromCurrency && !toCurrency) {
+    if (currencies.length > 0 && !hasLoadedFromStorage) {
+      const savedPreferences = getStoredPreferences();
+
+      if (savedPreferences) {
+        setAmount(savedPreferences.amount);
+
+        const savedFromCurrency = currencies.find(currency => currency.code === savedPreferences.fromCurrency);
+        const savedToCurrency = currencies.find(currency => currency.code === savedPreferences.toCurrency);
+
+        if (savedFromCurrency && savedToCurrency) {
+          setFromCurrency(savedFromCurrency);
+          setToCurrency(savedToCurrency);
+          setHasLoadedFromStorage(true);
+          return;
+        }
+      }
+
       const usd = currencies.find(currency => currency.code === 'USD');
       const eur = currencies.find(currency => currency.code === 'EUR');
 
       setFromCurrency(usd || currencies[0]);
       setToCurrency(eur || currencies[1]);
+      setHasLoadedFromStorage(true);
     }
-  }, [currencies, fromCurrency, toCurrency]);
+  }, [currencies, hasLoadedFromStorage]);
+
+  useEffect(() => {
+    if (fromCurrency && toCurrency && hasLoadedFromStorage) {
+      const preferences: StoredPreferences = {
+        amount,
+        fromCurrency: fromCurrency.code,
+        toCurrency: toCurrency.code,
+        lastUpdated: Date.now()
+      };
+      setStoredPreferences(preferences);
+    }
+  }, [amount, fromCurrency, toCurrency, hasLoadedFromStorage]);
 
   useEffect(() => {
     if (rates && fromCurrency && toCurrency && amount) {
@@ -107,7 +138,8 @@ const Form: React.FC = () => {
         exchangeRate={exchangeRate}
       />
     </div>
-  )
+  );
 };
 
 export default Form;
+

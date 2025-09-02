@@ -10,15 +10,22 @@
   --text-primary: #0A0A0A;
   --text-secondary: #737373;
   --text-rate: #1447E6;
+  --status-text: #008236;
+  --error-text: #C10007;
 
   --border: #D4D4D4;
   --border-rate: #BEDBFF;
+  --border-status: #B9F8CF;
+  --border-error: #FFC9C9;
 
   --bg-primary: #FFFFFF;
   --bg-secondary: #FAFAFA;
   --bg-rate: #EFF6FF;
+  --bg-status: #F0FDF4;
+  --bg-error: #FEF2F2;
 
   --focused: #DBEAFE;
+  --bg-rate-hover: rgb(216, 226, 238);
 
 }
 
