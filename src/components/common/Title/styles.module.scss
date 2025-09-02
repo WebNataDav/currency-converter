@@ -1,0 +1,43 @@
+.title {
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.title--h1 {
+  font-size: 32px;
+}
+
+.title--h2 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.title--h3 {
+  font-size: 1.25rem;
+}
+
+.title--h4 {
+  font-size: 1.125rem;
+}
+
+.title--h5 {
+  font-size: 1rem;
+}
+
+.title--h6 {
+  font-size: 0.875rem;
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+  .title--h1 {
+    font-size: 1.75rem;
+  }
+  
+  .title--h2 {
+    font-size: 1.25rem;
+  }
+}
