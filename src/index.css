@@ -9,12 +9,17 @@
 :root {
   --text-primary: #0A0A0A;
   --text-secondary: #737373;
+  --text-rate: #1447E6;
 
   --border: #D4D4D4;
+  --border-rate: #BEDBFF;
+
   --bg-primary: #FFFFFF;
   --bg-secondary: #FAFAFA;
+  --bg-rate: #EFF6FF;
 
   --focused: #DBEAFE;
+
 }
 
 

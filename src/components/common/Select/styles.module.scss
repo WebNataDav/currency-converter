@@ -17,7 +17,7 @@
   display: flex;
   justify-content: space-between;
   width: 254px;
-  padding: 0.2rem 1rem;
+  padding: 0.2rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 8px;
   background-color: var(--bg-secondary);
@@ -31,8 +31,26 @@
 
 .selectedValue {
   display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.currencyValues {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.currencySymbol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  color: var(--text-rate);
+  background-color: var(--bg-rate);
+  border: 1px solid var(--border-rate);
+  border-radius: 50%;
 }
 
 .currencyCode {

@@ -5,3 +5,8 @@
   text-align: center;
 }
 
+.wrapper {
+  display: flex;
+  gap: 20px;
+}
+
