@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
-import styles from './styles.module.scss';
+import { useState } from 'react';
+//import { FiSearch } from 'react-icons/fi';
 import { Currency } from '@/types';
+
+import styles from './styles.module.scss';
+//import SearchInput from '../SearchInput/index';
+import SelectModal from '../SelectModal/index';
+
 
 interface SelectProps {
   label: string;
@@ -46,46 +51,14 @@ const Select: React.FC<SelectProps> = ({
       </div>
 
       {isOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsOpen(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h3 className={styles.modalTitle}>Select currency</h3>
-              <p className={styles.modalSubtitle}>
-                Choose a currency from the list below or use the search bar to find a specific currency..
-              </p>
-
-              <div className={styles.searchContainer}>
-                <input
-                  type="text"
-                  placeholder="Search currencies..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className={styles.searchInput}
-                  autoFocus
-                />
-              </div>
-            </div>
-
-            <div className={styles.optionsList}>
-              {filteredOptions.length > 0 ? (
-                filteredOptions.map((option) => (
-                  <div
-                    key={option.code}
-                    className={`${styles.option} ${value.code === option.code ? styles.selected : ''}`}
-                    onClick={() => handleSelect(option)}
-                  >
-                    <span className={styles.optionCode}>{option.code}</span>
-                    <span className={styles.optionName}>{option.name}</span>
-                  </div>
-                ))
-              ) : (
-                  <div className={styles.noResults}>
-                    No currencies found matching "{searchTerm}"
-                </div>
-                )}
-            </div>
-          </div>
-        </div>
+        <SelectModal
+          searchTerm={searchTerm}
+          setIsOpen={setIsOpen}
+          filteredOptions={filteredOptions}
+          handleSelect={handleSelect}
+          setSearchTerm={setSearchTerm}
+          value={value}
+        />
       )}
     </div>
   );

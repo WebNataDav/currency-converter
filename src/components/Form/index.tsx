@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 import Input from '../common/Input';
 import Select from '../common/Select';
 import { Currency } from '@/types';
+import { SwitchButton } from '../common/SwitchButton/index';
 
 const mockCurrencies: Currency[] = [
   { code: 'USD', name: 'United States Dollar' },
@@ -19,6 +20,11 @@ const Form: React.FC = () => {
   const [amount, setAmount] = useState('');
   const [fromCurrency, setFromCurrency] = useState<Currency>(mockCurrencies[0]);
   const [toCurrency, setToCurrency] = useState<Currency>(mockCurrencies[1]);
+
+  const handleSwap = () => {
+    setFromCurrency(toCurrency);
+    setToCurrency(fromCurrency);
+  };
 
   return (
     <form className={styles.form}>
@@ -37,6 +43,8 @@ const Form: React.FC = () => {
           options={mockCurrencies}
           onChange={setFromCurrency}
         />
+
+        <SwitchButton onClick={handleSwap} />
 
         <Select
           label="To"

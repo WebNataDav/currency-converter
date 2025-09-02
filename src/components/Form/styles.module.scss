@@ -9,13 +9,14 @@
 }
 
 .currencySelectors {
-  display: grid;
+  display: flex;
+  align-items: center;
   gap: 1rem;
 }
 
 @media (min-width: 768px) {
-  .currencySelectors {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
+  // .currencySelectors {
+  //   grid-template-columns: 1fr 1fr;
+  //   gap: 1.5rem;
+  // }
 }
