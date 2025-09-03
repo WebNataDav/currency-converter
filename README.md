@@ -39,3 +39,9 @@ A modern currency conversion application built with React and TypeScript.
 1. Clone the repository:
 ```bash
 git clone git@github.com:WebNataDav/currency-converter.git
+cd currency-converter
+```
+2. Install dependencies:
+npm install
+3. Start the development server:
+npm run dev
