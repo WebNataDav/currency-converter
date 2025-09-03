@@ -2,17 +2,6 @@
 
 A modern currency conversion application built with React and TypeScript.
 
-## Setup Requirements
-
-### Prerequisites
-- Node.js (version 14 or higher)
-- npm or yarn package manager
-
-### Installation
-1. Clone the repository:
-```bash
-git clone git@github.com:WebNataDav/currency-converter.git
-
 ### Architecture & Key Decisions
 #### API Choice
 1. Primary API: VatComply API - chosen for its reliability, no API key requirement, and accurate exchange rates
@@ -39,3 +28,14 @@ git clone git@github.com:WebNataDav/currency-converter.git
 #### Component Architecture
 1. Modular Design: Separation of concerns with container and presentational components
 2. Reusable Components: Button, Input, Select, and other UI components built for reusability
+
+## Setup Requirements
+
+### Prerequisites
+- Node.js (version 14 or higher)
+- npm or yarn package manager
+
+### Installation
+1. Clone the repository:
+```bash
+git clone git@github.com:WebNataDav/currency-converter.git
