@@ -1,7 +1,6 @@
 import { getCurrencyName, getCurrencySymbol } from './../utils/index';
 import { ExchangeRates, Currency } from '@/types';
 
-//const API_BASE_URL = 'https://api.vatcomply.com';
 const API_BASE_URL = 'https://open.er-api.com/v6/latest';
 
 export const fetchExchangeRates = async (baseCurrency: string = 'EUR'): Promise<ExchangeRates> => {

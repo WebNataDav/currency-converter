@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { siteConfig } from '@/config/site.config';
 import { Title } from '../common/Title/index';
 import { formatRate, formatCurrency } from '@/utils/index';
@@ -24,7 +25,10 @@ const Result: React.FC<ResultProps> = ({
   isUsingCachedData = false
 }) => {
   const { isOnline } = useNetworkStatus();
-  const inverseRate = exchangeRate ? 1 / exchangeRate : null;
+
+  const inverseRate = useMemo(() =>
+    exchangeRate ? 1 / exchangeRate : null
+    , [exchangeRate]);
 
   if (convertedAmount === null || exchangeRate === null) {
     return (
