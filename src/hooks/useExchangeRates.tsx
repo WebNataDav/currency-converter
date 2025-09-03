@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchExchangeRates, getAvailableCurrencies } from '@/services/api';
 import { ExchangeRates, Currency } from '@/types';
-import { getCachedRates, setCachedRates } from '@/utils/localStorage';
+import { getCachedRates, setCachedRates, CachedRates } from '@/utils/localStorage';
 import { useNetworkStatus } from './useNetworkStatus';
 
 export const useExchangeRates = () => {
@@ -11,7 +11,10 @@ export const useExchangeRates = () => {
   const [error, setError] = useState<string | null>(null);
   const { isOnline } = useNetworkStatus();
 
+  const RATES_CACHE_KEY = 'currencyConverterRatesCache';
+
   useEffect(() => {
+
     const loadRates = async () => {
       try {
         setLoading(true);
@@ -19,8 +22,32 @@ export const useExchangeRates = () => {
 
         const cachedRates = getCachedRates();
 
-        if (cachedRates && !isOnline) {
-          console.log('Using cached rates (offline mode)');
+        if (!isOnline) {
+          const anyCachedRates = localStorage.getItem(RATES_CACHE_KEY);
+
+          if (anyCachedRates) {
+            try {
+              const parsedRates: CachedRates = JSON.parse(anyCachedRates);
+              console.log('Using cached rates (offline mode - may be expired)');
+              setRates({
+                date: parsedRates.date,
+                base: parsedRates.base,
+                rates: parsedRates.rates
+              });
+
+              const availableCurrencies = getAvailableCurrencies(parsedRates.rates);
+              setCurrencies(availableCurrencies);
+              setLoading(false);
+              return;
+            } catch (parseError) {
+            }
+          }
+
+          throw new Error('Offline - no cached rates available');
+        }
+
+        if (cachedRates) {
+          console.log('Using cached rates (online mode)');
           setRates({
             date: cachedRates.date,
             base: cachedRates.base,
@@ -29,16 +56,12 @@ export const useExchangeRates = () => {
 
           const availableCurrencies = getAvailableCurrencies(cachedRates.rates);
           setCurrencies(availableCurrencies);
+          setLoading(false);
           return;
-        }
-
-        if (!isOnline) {
-          throw new Error('Offline - no cached rates available');
         }
 
         const exchangeRates = await fetchExchangeRates();
         setRates(exchangeRates);
-
         setCachedRates(exchangeRates.rates, exchangeRates.base, exchangeRates.date);
 
         const availableCurrencies = getAvailableCurrencies(exchangeRates.rates);

@@ -6,13 +6,15 @@ interface SearchInputProps {
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
   value,
   onChange,
   placeholder = 'Search...',
-  className = ''
+  className = '',
+  onKeyDown
 }) => {
   return (
     <div className={`${styles.searchContainer} ${className}`}>
@@ -23,6 +25,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className={styles.searchInput}
+        onKeyDown={onKeyDown}
       />
     </div>
   );

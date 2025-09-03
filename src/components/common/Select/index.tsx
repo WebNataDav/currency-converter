@@ -34,6 +34,12 @@ const Select: React.FC<SelectProps> = ({
     setSearchTerm('');
   };
 
+  const modalValue = value || {
+    code: '',
+    name: 'Select currency',
+    symbol: ''
+  };
+
   return (
     <div className={`${styles.selectContainer} ${className}`}>
       <label className={styles.label}>{label}</label>
@@ -52,7 +58,8 @@ const Select: React.FC<SelectProps> = ({
           filteredOptions={filteredOptions}
           handleSelect={handleSelect}
           setSearchTerm={setSearchTerm}
-          value={value}
+          // value={value}
+          value={modalValue}
         />
       )}
     </div>

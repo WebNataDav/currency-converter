@@ -45,7 +45,7 @@ export const setStoredPreferences = (preferences: StoredPreferences): void => {
   }
 };
 
-export const getCachedRates = (): CachedRates | null => {
+export const getCachedRates = (isOnline: boolean = true): CachedRates | null => {
   try {
     const cached = localStorage.getItem(RATES_CACHE_KEY);
     if (!cached) return null;
@@ -53,9 +53,14 @@ export const getCachedRates = (): CachedRates | null => {
     const ratesCache: CachedRates = JSON.parse(cached);
 
     const now = Date.now();
-    if (now - ratesCache.timestamp > CACHE_EXPIRY_MS) {
+
+    if (isOnline && now - ratesCache.timestamp > CACHE_EXPIRY_MS) {
       clearCachedRates();
       return null;
+    }
+
+    if (!isOnline && now - ratesCache.timestamp > CACHE_EXPIRY_MS) {
+      console.log('Using expired cached rates (offline mode)');
     }
 
     if (ratesCache && ratesCache.rates && ratesCache.base && ratesCache.date) {

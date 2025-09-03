@@ -1,11 +1,11 @@
 import { getCurrencyName, getCurrencySymbol } from './../utils/index';
 import { ExchangeRates, Currency } from '@/types';
 
-const API_BASE_URL = 'https://open.er-api.com/v6/latest';
+const API_BASE_URL = 'https://api.frankfurter.app/latest';
 
 export const fetchExchangeRates = async (baseCurrency: string = 'EUR'): Promise<ExchangeRates> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/${baseCurrency}`);
+    const response = await fetch(`${API_BASE_URL}?from=${baseCurrency}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);

@@ -6,6 +6,14 @@ interface SelectedValueProps {
 }
 
 export const SelectedValue: React.FC<SelectedValueProps> = ({ value }) => {
+  if (!value) {
+    return (
+      <div className={styles.selectedValue}>
+        <span className={styles.placeholder}>Select currency</span>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.selectedValue}>
       <span className={styles.currencySymbol}>{value.symbol}</span>

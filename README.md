@@ -5,7 +5,7 @@ A modern currency conversion application built with React and TypeScript.
 ### Architecture & Key Decisions
 #### API Choice
 1. Primary API: VatComply API - chosen for its reliability, no API key requirement, and accurate exchange rates
-2. Fallback Option: ExchangeRateAPI - implemented as a backup for better reliability
+2. Frankfurter API - implemented as a backup for better reliability
 3. Decision Rationale: These APIs provide simple REST interfaces with regularly updated currency rates without authentication requirements
 
 #### Caching Strategy

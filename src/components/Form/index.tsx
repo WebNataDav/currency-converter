@@ -136,7 +136,6 @@ const Form: React.FC = () => {
             value={fromCurrency}
             options={currencies}
             onChange={setFromCurrency}
-            disabled={loading}
           />
 
           <SwitchButton onClick={handleSwap} />
@@ -146,7 +145,6 @@ const Form: React.FC = () => {
             value={toCurrency}
             options={currencies}
             onChange={setToCurrency}
-            disabled={loading}
           />
         </div>
       </form>
