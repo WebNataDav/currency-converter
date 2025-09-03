@@ -2,22 +2,17 @@ import { getCurrencyName, getCurrencySymbol } from './../utils/index';
 import { ExchangeRates, Currency } from '@/types';
 
 //const API_BASE_URL = 'https://api.vatcomply.com';
-const API_BASE_URL = 'https://api.frankfurter.app/latest';
+const API_BASE_URL = 'https://open.er-api.com/v6/latest';
 
 export const fetchExchangeRates = async (baseCurrency: string = 'EUR'): Promise<ExchangeRates> => {
   try {
-    //const response = await fetch(`${API_BASE_URL}/rates?base=${baseCurrency}`);
-    // response = await fetch(`${API_BASE_URL}/rates`);
-
-    const response = await fetch(`${API_BASE_URL}?from=${baseCurrency}`);
+    const response = await fetch(`${API_BASE_URL}/${baseCurrency}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
 
     const data = await response.json();
-
-    console.log('data', data)
 
     return {
       date: data.date,

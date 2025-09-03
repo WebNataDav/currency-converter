@@ -66,3 +66,14 @@
   color: var(--text-secondary);
 }
 
+
+@media (max-width: 480px) {
+  .selectContainer, .selectTrigger {
+    width: 100%;
+  }
+
+  .selectContainer {
+    margin-bottom: 0.5rem;
+  }
+}
+

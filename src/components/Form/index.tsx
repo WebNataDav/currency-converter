@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Input from '../common/Input';
 import Select from '../common/Select';
 import { Currency } from '@/types';
@@ -7,25 +7,39 @@ import { convertCurrency } from '@/services/currencyConverter';
 import { SwitchButton } from '../common/SwitchButton/index';
 import Result from '../Result/index';
 import { getStoredPreferences, setStoredPreferences, StoredPreferences } from '@/utils/localStorage';
-
+import { debounce } from '@/utils/debounce';
 import styles from './styles.module.scss';
 
 const Form: React.FC = () => {
-  const [amount, setAmount] = useState('1');
+  const [inputAmount, setInputAmount] = useState('1');
+  const [calculationAmount, setCalculationAmount] = useState('1');
   const [fromCurrency, setFromCurrency] = useState<Currency | null>(null);
   const [toCurrency, setToCurrency] = useState<Currency | null>(null);
   const [convertedAmount, setConvertedAmount] = useState<number | null>(null);
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   const [hasLoadedFromStorage, setHasLoadedFromStorage] = useState(false);
 
-  const { rates, currencies, loading, error } = useExchangeRates();
+  const { rates, currencies, loading, error, isOnline } = useExchangeRates();
+
+  const debouncedSetCalculationAmount = useCallback(
+    debounce((amount: string) => {
+      setCalculationAmount(amount);
+    }, 250),
+    []
+  );
+
+  const handleAmountChange = (amount: string) => {
+    setInputAmount(amount);
+    debouncedSetCalculationAmount(amount);
+  };
 
   useEffect(() => {
     if (currencies.length > 0 && !hasLoadedFromStorage) {
       const savedPreferences = getStoredPreferences();
 
       if (savedPreferences) {
-        setAmount(savedPreferences.amount);
+        setInputAmount(savedPreferences.amount);
+        setCalculationAmount(savedPreferences.amount);
 
         const savedFromCurrency = currencies.find(currency => currency.code === savedPreferences.fromCurrency);
         const savedToCurrency = currencies.find(currency => currency.code === savedPreferences.toCurrency);
@@ -50,19 +64,19 @@ const Form: React.FC = () => {
   useEffect(() => {
     if (fromCurrency && toCurrency && hasLoadedFromStorage) {
       const preferences: StoredPreferences = {
-        amount,
+        amount: inputAmount,
         fromCurrency: fromCurrency.code,
         toCurrency: toCurrency.code,
         lastUpdated: Date.now()
       };
       setStoredPreferences(preferences);
     }
-  }, [amount, fromCurrency, toCurrency, hasLoadedFromStorage]);
+  }, [inputAmount, fromCurrency, toCurrency, hasLoadedFromStorage]);
 
   useEffect(() => {
-    if (rates && fromCurrency && toCurrency && amount) {
+    if (rates && fromCurrency && toCurrency && calculationAmount) {
       try {
-        const numericAmount = parseFloat(amount.replace(',', '.'));
+        const numericAmount = parseFloat(calculationAmount.replace(',', '.'));
         if (!isNaN(numericAmount)) {
           const result = convertCurrency(
             numericAmount,
@@ -72,13 +86,19 @@ const Form: React.FC = () => {
           );
           setConvertedAmount(result.convertedAmount);
           setExchangeRate(result.rate);
+        } else {
+          setConvertedAmount(null);
+          setExchangeRate(null);
         }
       } catch (err) {
         setConvertedAmount(null);
         setExchangeRate(null);
       }
+    } else {
+      setConvertedAmount(null);
+      setExchangeRate(null);
     }
-  }, [amount, fromCurrency, toCurrency, rates]);
+  }, [calculationAmount, fromCurrency, toCurrency, rates]);
 
   const handleSwap = () => {
     if (fromCurrency && toCurrency) {
@@ -105,8 +125,8 @@ const Form: React.FC = () => {
         <Input
           id="amount"
           label="Amount"
-          value={amount}
-          onChange={setAmount}
+          value={inputAmount}
+          onChange={handleAmountChange}
           type="text"
           placeholder="1"
         />
@@ -131,11 +151,13 @@ const Form: React.FC = () => {
         </div>
       </form>
       <Result
-        amount={amount ? parseFloat(amount.replace(',', '.')) || 0 : 0}
+        amount={calculationAmount ? parseFloat(calculationAmount.replace(',', '.')) || 0 : 0}
         fromCurrency={fromCurrency.code}
         toCurrency={toCurrency.code}
         convertedAmount={convertedAmount}
         exchangeRate={exchangeRate}
+        ratesDate={rates?.date}
+        isUsingCachedData={!isOnline}
       />
     </div>
   );

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Title } from './index';
 import { siteConfig } from '../../../config/site.config';
 

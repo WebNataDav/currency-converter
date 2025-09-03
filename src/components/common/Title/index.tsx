@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode, ElementType } from 'react';
 import styles from './styles.module.scss';
 
 interface TitleProps {
@@ -12,7 +12,7 @@ export const Title: React.FC<TitleProps> = ({
   className = '',
   children
 }) => {
-  const Tag = `h${level}` as keyof JSX.IntrinsicElements;
+  const Tag = `h${level}` as ElementType;
 
   const titleClass = `${styles.title} ${styles[`title--h${level}`]} ${className}`;
 

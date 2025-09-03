@@ -1,8 +1,8 @@
-import styles from './styles.module.scss';
 import { siteConfig } from '@/config/site.config';
 import { Title } from '../common/Title/index';
-import { formatRate } from '@/utils/index';
-import { formatCurrency } from '@/utils/index';
+import { formatRate, formatCurrency } from '@/utils/index';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import styles from './styles.module.scss';
 
 interface ResultProps {
   amount: number;
@@ -10,6 +10,8 @@ interface ResultProps {
   toCurrency: string;
   convertedAmount: number | null;
   exchangeRate: number | null;
+  ratesDate?: string;
+  isUsingCachedData?: boolean;
 }
 
 const Result: React.FC<ResultProps> = ({
@@ -17,8 +19,11 @@ const Result: React.FC<ResultProps> = ({
   fromCurrency,
   toCurrency,
   convertedAmount,
-  exchangeRate
+  exchangeRate,
+  ratesDate,
+  isUsingCachedData = false
 }) => {
+  const { isOnline } = useNetworkStatus();
   const inverseRate = exchangeRate ? 1 / exchangeRate : null;
 
   if (convertedAmount === null || exchangeRate === null) {
@@ -32,11 +37,24 @@ const Result: React.FC<ResultProps> = ({
     );
   }
 
+  const formatCacheDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+  };
+
   return (
     <div className={styles.wrapper}>
       <Title level={3}>
         {siteConfig.resultTitle}
       </Title>
+
+      {!isOnline && isUsingCachedData && ratesDate && (
+        <div className={styles.cacheNotice}>
+          <span className={styles.cacheIcon}>⚠️</span>
+          Using cached rates from {formatCacheDate(ratesDate)}
+        </div>
+      )}
+
       <div className={styles.currencyResults}>
         <strong className={styles.currencyValue}>
           {formatCurrency(convertedAmount, toCurrency)}
@@ -45,6 +63,7 @@ const Result: React.FC<ResultProps> = ({
           {amount} {fromCurrency} =
         </p>
       </div>
+
       <div className={styles.rateWrapper}>
         <div className={styles.rateInner}>
           <p className={styles.rateTitle}>{siteConfig.exchangeRateTitle}</p>
@@ -59,11 +78,14 @@ const Result: React.FC<ResultProps> = ({
           </p>
         </div>
       </div>
+
       <div className={styles.rateInfo}>
-        <p className={styles.rateInfoText}>{siteConfig.rateInfo}</p>
+        <p className={styles.rateInfoText}>
+          {isUsingCachedData ? siteConfig.rateInfoOffline : siteConfig.rateInfo}
+        </p>
       </div>
     </div>
-  )
+  );
 };
 
 export default Result;

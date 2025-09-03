@@ -19,9 +19,14 @@
   gap: 1rem;
 }
 
-@media (min-width: 768px) {
-  // .currencySelectors {
-  //   grid-template-columns: 1fr 1fr;
-  //   gap: 1.5rem;
-  // }
+@media (max-width: 480px) {
+  .wrapper {
+    flex-wrap: wrap;
+  }
+
+  .currencySelectors {
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 0.3rem;
+  }
 }

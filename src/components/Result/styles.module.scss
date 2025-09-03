@@ -69,3 +69,27 @@
   padding: 10px;
   border-radius: 8px;
 }
+
+.cacheNotice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  color: #92400e;
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.cacheIcon {
+  font-size: 0.875rem;
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    width: 100%;
+    margin-top: 20px;
+  }
+}

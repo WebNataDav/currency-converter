@@ -66,3 +66,19 @@ export const formatCurrency = (value: number, currencyCode: string): string => {
 export const formatRate = (rate: number): string => {
   return rate.toFixed(6);
 };
+
+export const formatDate = (date: Date): string => {
+  return date.toLocaleDateString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric'
+  });
+};
+
+export const formatTime = (date: Date): string => {
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
+};

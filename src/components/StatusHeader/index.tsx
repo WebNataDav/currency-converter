@@ -1,7 +1,10 @@
+import { useState, useCallback } from 'react';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useExchangeRates } from '@/hooks/useExchangeRates';
-
 import { FaWifi, FaRegClock, FaRedo, FaBan } from 'react-icons/fa';
+import { debounce } from '@/utils/debounce';
+import { formatDate } from '@/utils/index';
+import { formatTime } from '@/utils/index';
 import styles from './styles.module.scss';
 
 interface StatusHeaderProps {
@@ -11,36 +14,40 @@ interface StatusHeaderProps {
 export const StatusHeader: React.FC<StatusHeaderProps> = ({ onRefresh }) => {
   const { isOnline } = useNetworkStatus();
   const { rates, loading, refreshRates } = useExchangeRates();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const lastUpdated = rates?.date ? new Date(rates.date) : null;
 
-  const formatDate = (date: Date): string => {
-    return date.toLocaleDateString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const formatTime = (date: Date): string => {
-    return date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
-  };
+  const debouncedRefresh = useCallback(
+    debounce(async () => {
+      setIsRefreshing(true);
+      try {
+        if (onRefresh) {
+          await onRefresh();
+        } else {
+          await refreshRates();
+        }
+      } catch (error) {
+        console.error('Refresh failed:', error);
+      } finally {
+        setIsRefreshing(false);
+      }
+    }, 1000),
+    [onRefresh, refreshRates]
+  );
 
   const handleRefresh = () => {
-    if (onRefresh && !loading) {
-      onRefresh();
-    }
+    if ((loading || isRefreshing) || !isOnline) return;
+    debouncedRefresh();
   };
+
+  const showLoading = loading || isRefreshing;
 
   return (
     <div className={styles.statusHeader}>
       <div className={styles.statusSection}>
         <div className={`${styles.statusIndicator} ${isOnline ? styles.online : styles.offline}`}>
-          <div >
+          <div>
             {isOnline ? (
               <FaWifi
                 size={12}
@@ -56,10 +63,10 @@ export const StatusHeader: React.FC<StatusHeaderProps> = ({ onRefresh }) => {
 
           <span className={`${styles.statusText} ${isOnline ? styles.online : styles.offline}`}>
             {isOnline ? 'Online' : 'Offline'}
+            {!isOnline && ' • Using cached rates'}
           </span>
         </div>
       </div>
-
 
       <div className={styles.infoSection}>
         {lastUpdated ? (
@@ -79,13 +86,13 @@ export const StatusHeader: React.FC<StatusHeaderProps> = ({ onRefresh }) => {
         <button
           className={styles.refreshButton}
           onClick={handleRefresh}
-          disabled={loading || !isOnline}
+          disabled={showLoading || !isOnline}
           aria-label="Refresh exchange rates"
         >
           <FaRedo size={10} className={styles.refreshSpinner} />
           {loading ? 'Refreshing...' : 'Refresh rates'}
         </button>
       </div>
-    </div >
+    </div>
   );
 };

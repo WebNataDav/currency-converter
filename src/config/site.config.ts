@@ -5,5 +5,6 @@ export const siteConfig = {
   exchangeRateTitle: "Exchange Rate",
   inverseRateTitle: "Inverse Rate",
   rateInfo: "Rates are for informational purposes only and may not reflect real-time market rates",
-  selectModalTitle: "Choose a currency from the list below or use the search bar to find a specific currency."
+  selectModalTitle: "Choose a currency from the list below or use the search bar to find a specific currency.",
+  rateInfoOffline: "Using cached rates. Rates may not reflect current market values.",
 }
