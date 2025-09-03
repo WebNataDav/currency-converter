@@ -1,69 +1,41 @@
-# React + TypeScript + Vite
+# Currency Converter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern currency conversion application built with React and TypeScript.
 
-Currently, two official plugins are available:
+## Setup Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prerequisites
+- Node.js (version 14 or higher)
+- npm or yarn package manager
 
-## Expanding the ESLint configuration
+### Installation
+1. Clone the repository:
+```bash
+git clone git@github.com:WebNataDav/currency-converter.git
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Architecture & Key Decisions
+#### API Choice
+1. Primary API: VatComply API - chosen for its reliability, no API key requirement, and accurate exchange rates
+2. Fallback Option: ExchangeRateAPI - implemented as a backup for better reliability
+3. Decision Rationale: These APIs provide simple REST interfaces with regularly updated currency rates without authentication requirements
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+#### Caching Strategy
+1. Client-side Caching: Implemented to reduce API calls and minimize rate limiting
+2. Cache Duration: Configurable through environment variables (default: 1 hour)
+3. Storage: localStorage used for persistence across browser sessions
+4. Benefits: Improved performance, reduced network requests, and offline functionality for recently accessed rates
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+#### Formatting & Validation
+1. Decimal Input: Custom handling that accepts both comma and period as decimal separators
+2. Number Formatting: Values formatted according to user's locale preferences
+3. Input Validation: Prevents invalid characters and ensures only numerical values are processed
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+#### Custom Hooks
+1. Created for API calls, currency formatting, and cached data retrieval
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+#### Error Handling
+1. Comprehensive error handling with user-friendly messages
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+#### Component Architecture
+1. Modular Design: Separation of concerns with container and presentational components
+2. Reusable Components: Button, Input, Select, and other UI components built for reusability
